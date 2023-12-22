@@ -1,7 +1,10 @@
-import chalk from "chalk";
 import "dotenv/config";
-import debugCreator from "debug";
+import logger from "./logger/logger.js";
 
-const debug = debugCreator("app:");
+const log = logger("app");
 
-debug(chalk.blue("Launching application"));
+log.info("Launching Discord Remindabot");
+
+log.success("Client launched succesfully");
+
+log.error("Shutting down Remindabot...");
