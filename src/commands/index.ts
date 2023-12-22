@@ -1,5 +1,7 @@
-import { REST, Routes, SlashCommandBuilder } from "discord.js";
+import { REST, Routes } from "discord.js";
 import logger from "../logger/logger.js";
+import krisaCommand from "./krisaCommand.js";
+import askKrisaCommand from "./askKrisaCommand.js";
 
 const log = logger("commands:");
 const discordBotToken = process.env.DISCORD_TOKEN;
@@ -11,9 +13,7 @@ if (!discordApplicationId) {
   process.exit();
 }
 
-const commands = [
-  new SlashCommandBuilder().setName("krisa").setDescription("Returns a krisa"),
-];
+const commands = [krisaCommand, askKrisaCommand];
 
 if (!discordBotToken) {
   log.error("Error, missing Discord Bot Token");

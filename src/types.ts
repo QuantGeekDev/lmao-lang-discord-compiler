@@ -3,3 +3,7 @@ export interface KrisaStructure {
   krisaNumber: number;
   imageUrl: string;
 }
+
+export type krisaFortuneStructure = {
+  rating: "Yes" | "No" | "Krisa Krisa";
+};

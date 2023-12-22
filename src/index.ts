@@ -1,23 +1,16 @@
 import "dotenv/config";
-import axios, { AxiosResponse } from "axios";
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import logger from "./logger/logger.js";
-import "./commands/commands.js";
-import { KrisaStructure } from "./types.js";
+import "./commands/index.js";
+import generateKrisaMessage from "./services/krisa/generateKrisaMessage.js";
+import getRandomKrisa from "./services/krisa/getRandomKrisa.js";
+import generateKrisaFortune from "./services/krisa/generateKrisaFortune.js";
 
 const discordBotToken = process.env.DISCORD_TOKEN;
-const krisaApiUrl = process.env.KRISA_API;
 
 const log = logger("app");
 
-axios.defaults.baseURL = krisaApiUrl;
-
-const generateKrisaMessage = (krisa: KrisaStructure): string => {
-  const { krisaNumber, imageUrl } = krisa;
-  return `**[Krisa #${krisaNumber}](${imageUrl} "Krisa")**`;
-};
-
-log.info("Launching Discord Remindabot");
+log.info("Launching Krisa Discord Bot");
 
 const client = new Client({
   intents: [
@@ -38,18 +31,41 @@ client.on(Events.InteractionCreate, async (interaction) => {
     return;
   }
 
-  let { data } = (await axios.get("krisas")) as AxiosResponse<{
-    krisas: KrisaStructure[];
-  }>;
+  switch (interaction.commandName) {
+    case "krisa": {
+      const randomKrisa = await getRandomKrisa();
+      const krisasMessage = generateKrisaMessage(randomKrisa);
 
-  const krisasAmount = data.krisas.length;
-  const randomNumber = Math.floor(Math.random() * krisasAmount);
+      await interaction.reply(krisasMessage);
+      break;
+    }
 
-  const randomKrisa = data.krisas[randomNumber];
+    case "ask-krisa": {
+      try {
+        if (!interaction.options.data[0]?.value) {
+          await interaction.reply("You forgot to ask the question...");
+          break;
+        }
+        const question = interaction.options.data[0].value.toString();
 
-  const krisasMessage = generateKrisaMessage(randomKrisa);
+        log.success(question);
+        const answer = await generateKrisaFortune(question);
 
-  await interaction.reply(krisasMessage);
+        const answerMessage = `🧀🐀The Krisa Oracle has replied \n *Q: ${question}* \n **A: ${answer}**`;
+        await interaction.reply(answerMessage);
+
+        break;
+      } catch (error) {
+        await interaction.reply(
+          "Error processing request, please try again later",
+        );
+        log.error((error as Error).message);
+        break;
+      }
+    }
+    default:
+      break;
+  }
 });
 
 await client.login(discordBotToken);
