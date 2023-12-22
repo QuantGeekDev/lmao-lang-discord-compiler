@@ -4,7 +4,7 @@ import krisaCommand from "./krisaCommand.js";
 import askKrisaCommand from "./askKrisaCommand.js";
 
 const log = logger("commands:");
-const discordBotToken = process.env.DISCORD_TOKEN;
+
 const discordApplicationId = process.env.DISCORD_APPLICATION_ID;
 
 if (!discordApplicationId) {
@@ -13,15 +13,17 @@ if (!discordApplicationId) {
   process.exit();
 }
 
-const commands = [krisaCommand, askKrisaCommand];
+const discordBotToken = process.env.DISCORD_TOKEN;
 
 if (!discordBotToken) {
   log.error("Error, missing Discord Bot Token");
   log.error("Shutting down...");
   process.exit();
 }
+
 const rest = new REST().setToken(discordBotToken);
 
+const commands = [krisaCommand, askKrisaCommand];
 try {
   await rest.put(Routes.applicationCommands(discordApplicationId), {
     body: commands,
