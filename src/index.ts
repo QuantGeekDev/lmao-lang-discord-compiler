@@ -4,6 +4,7 @@ import logger from "./logger/logger.js";
 import "./commands/index.js";
 import generateKrisaMessage from "./services/krisa/generateKrisaMessage.js";
 import getRandomKrisa from "./services/krisa/getRandomKrisa.js";
+import generateKrisaFortune from "./services/krisa/generateKrisaFortune.js";
 
 const discordBotToken = process.env.DISCORD_TOKEN;
 
@@ -38,9 +39,29 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await interaction.reply(krisasMessage);
       break;
     }
+
     case "ask-krisa": {
-      await interaction.reply("I will answer your questions, yes");
-      break;
+      try {
+        if (!interaction.options.data[0]?.value) {
+          await interaction.reply("You forgot to ask the question...");
+          break;
+        }
+        const question = interaction.options.data[0].value.toString();
+
+        log.success(question);
+        const answer = await generateKrisaFortune(question);
+
+        const answerMessage = `🧀🐀The Krisa Oracle has replied \n *Q: ${question}* \n **A: ${answer}**`;
+        await interaction.reply(answerMessage);
+
+        break;
+      } catch (error) {
+        await interaction.reply(
+          "Error processing request, please try again later",
+        );
+        log.error((error as Error).message);
+        break;
+      }
     }
     default:
       break;
