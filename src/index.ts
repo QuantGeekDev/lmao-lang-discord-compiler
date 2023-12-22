@@ -48,7 +48,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }
         const question = interaction.options.data[0].value.toString();
 
-        log.success(question);
         const answer = await generateKrisaFortune(question);
 
         const answerMessage = `🧀🐀The Krisa Oracle has replied \n *Q: ${question}* \n **A: ${answer}**`;
