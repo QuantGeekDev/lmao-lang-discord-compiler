@@ -5,6 +5,9 @@ const { getKrisas } = useKrisaApi();
 
 const getRandomKrisa = async (): Promise<KrisaStructure> => {
   const krisas = await getKrisas();
+  if (!krisas) {
+    return {} as KrisaStructure;
+  }
   const krisasAmount = krisas.length;
   const randomNumber = Math.floor(Math.random() * krisasAmount);
 
