@@ -11,7 +11,7 @@ if (!discordApplicationId) {
 }
 
 const commands = [
-  new SlashCommandBuilder().setName("ping").setDescription("Replies 'Pong'"),
+  new SlashCommandBuilder().setName("krisa").setDescription("Returns a krisa"),
 ];
 
 if (!discordBotToken) {
