@@ -7,6 +7,7 @@ const discordApplicationId = process.env.DISCORD_APPLICATION_ID;
 
 if (!discordApplicationId) {
   log.error("Error, missing Discord Application ID");
+  log.error("Shutting down...");
   process.exit();
 }
 
@@ -15,6 +16,8 @@ const commands = [
 ];
 
 if (!discordBotToken) {
+  log.error("Error, missing Discord Bot Token");
+  log.error("Shutting down...");
   process.exit();
 }
 const rest = new REST().setToken(discordBotToken);
