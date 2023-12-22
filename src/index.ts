@@ -1,18 +1,13 @@
 import "dotenv/config";
-import axios, { AxiosResponse } from "axios";
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import logger from "./logger/logger.js";
 import "./commands/index.js";
-import { KrisaStructure } from "./types.js";
 import generateKrisaMessage from "./services/krisa/generateKrisaMessage.js";
 import getRandomKrisa from "./services/krisa/getRandomKrisa.js";
 
 const discordBotToken = process.env.DISCORD_TOKEN;
-const krisaApiUrl = process.env.KRISA_API;
 
 const log = logger("app");
-
-axios.defaults.baseURL = krisaApiUrl;
 
 log.info("Launching Krisa Discord Bot");
 

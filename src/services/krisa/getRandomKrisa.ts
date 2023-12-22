@@ -1,14 +1,14 @@
-import axios, { AxiosResponse } from "axios";
 import { KrisaStructure } from "../../types";
+import useKrisaApi from "../useKrisaApi/useKrisaApi.js";
+
+const { getKrisas } = useKrisaApi();
 
 const getRandomKrisa = async (): Promise<KrisaStructure> => {
-  let { data } = (await axios.get("krisas")) as AxiosResponse<{
-    krisas: KrisaStructure[];
-  }>;
-  const krisasAmount = data.krisas.length;
+  const krisas = await getKrisas();
+  const krisasAmount = krisas.length;
   const randomNumber = Math.floor(Math.random() * krisasAmount);
 
-  const randomKrisa = data.krisas[randomNumber];
+  const randomKrisa = krisas[randomNumber];
   return randomKrisa;
 };
 
