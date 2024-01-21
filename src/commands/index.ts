@@ -1,7 +1,6 @@
 import { REST, Routes } from "discord.js";
 import logger from "../logger/logger.js";
-import krisaCommand from "./krisaCommand.js";
-import askKrisaCommand from "./askKrisaCommand.js";
+import compile from "./compile.js";
 
 const log = logger("commands:");
 
@@ -23,7 +22,8 @@ if (!discordBotToken) {
 
 const rest = new REST().setToken(discordBotToken);
 
-const commands = [krisaCommand, askKrisaCommand];
+const commands = [compile];
+
 try {
   await rest.put(Routes.applicationCommands(discordApplicationId), {
     body: commands,

@@ -2,15 +2,13 @@ import "dotenv/config";
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import logger from "./logger/logger.js";
 import "./commands/index.js";
-import generateKrisaMessage from "./services/krisa/generateKrisaMessage.js";
-import getRandomKrisa from "./services/krisa/getRandomKrisa.js";
-import generateKrisaFortune from "./services/krisa/generateKrisaFortune.js";
+import { compileLmaoCode } from "./services/lmao/compile.js";
 
 const discordBotToken = process.env.DISCORD_TOKEN;
 
 const log = logger("app");
 
-log.info("Launching Krisa Discord Bot");
+log.info("Launching LMAO Discord Bot");
 
 const client = new Client({
   intents: [
@@ -32,32 +30,29 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   switch (interaction.commandName) {
-    case "krisa": {
-      const randomKrisa = await getRandomKrisa();
-      const krisasMessage = generateKrisaMessage(randomKrisa);
-
-      await interaction.reply(krisasMessage);
-      break;
-    }
-
-    case "ask-krisa": {
+    case "compile": {
       try {
         if (!interaction.options.data[0]?.value) {
-          await interaction.reply("You forgot to ask the question...");
+          await interaction.reply("You forgot to add the code...");
           break;
         }
-        const question = interaction.options.data[0].value.toString();
+        const code = interaction.options.data[0].value.toString();
+        const formattedSourceCode = code.replace(/\s+/g, "");
+        const isVoldemort = /voldemort/i.test(code);
+        if (isVoldemort) {
+          const answerMessage = `You attempted to compile: \`\`\` ${formattedSourceCode} \`\`\` \ Compiler response: \n "There is just one rule and you HAD to break it, didn't you?😡😡😡😒😒 `;
+          await interaction.reply(answerMessage);
+          return;
+        }
 
-        const answer = await generateKrisaFortune(question);
+        const compiledCode = compileLmaoCode(code);
 
-        const answerMessage = `🧀🐀The Krisa Oracle has replied \n *Q: ${question}* \n **A: ${answer}**`;
+        const answerMessage = `👁️👄👁️ Huge Slay!\n Your source code: \`\`\`${formattedSourceCode}\`\`\` \n Here is your compiled '🤣' code :\n \`\`\`html\n ${compiledCode} \`\`\` `;
         await interaction.reply(answerMessage);
 
         break;
       } catch (error) {
-        await interaction.reply(
-          "Error processing request, please try again later",
-        );
+        await interaction.reply("Error compiling lmao, please try again later");
         log.error((error as Error).message);
         break;
       }
