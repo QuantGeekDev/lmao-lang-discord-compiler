@@ -1,6 +1,6 @@
 import { REST, Routes } from "discord.js";
 import logger from "../logger/logger.js";
-import skibbidy from "./skibbidy.js";
+import skibbidi from "./skibbidi.js";
 
 const log = logger("commands:");
 
@@ -22,7 +22,7 @@ if (!discordBotToken) {
 
 const rest = new REST().setToken(discordBotToken);
 
-const commands = [skibbidy];
+const commands = [skibbidi];
 
 try {
   await rest.put(Routes.applicationCommands(discordApplicationId), {
