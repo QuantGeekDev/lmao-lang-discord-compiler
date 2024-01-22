@@ -30,7 +30,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   switch (interaction.commandName) {
-    case "skibbidi": {
+    case "skibidi": {
       try {
         if (!interaction.options.data[0]?.value) {
           await interaction.reply("You forgot to add the code...");
