@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from "discord.js";
 
-const skibbidi = new SlashCommandBuilder()
-  .setName("skibbidi")
+const skibidi = new SlashCommandBuilder()
+  .setName("skibidi")
   .setDescription("Compile your '🤣' code")
   .addStringOption((option) =>
     option.setName("code").setDescription("The '🤣' code to compile"),
   );
 
-export default skibbidi;
+export default skibidi;
